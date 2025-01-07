@@ -41,7 +41,7 @@ const EditFormPage: React.FC = () => {
         );
         reset(response.data); // Populate form fields with the fetched data
       } catch (err) {
-        setError("Failed to fetch product data.");
+        setError("Failed to fetch product data."+err);
       } finally {
         setLoading(false);
       }

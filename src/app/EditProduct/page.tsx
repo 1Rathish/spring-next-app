@@ -231,7 +231,7 @@ const EditFormPage: React.FC = () => {
         </div>
 
         <button type="submit" style={buttonStyle}>
-          Save Changes
+        {id ? 'Save Changes' : 'Save Product'}
         </button>
       </form>
     </div>

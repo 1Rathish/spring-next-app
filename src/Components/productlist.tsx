@@ -232,7 +232,7 @@ const ProductList: React.FC = () => {
           marginTop: "30px",
         }}
       >
-        &copy; 2024 Your Company. All Rights Reserved.
+        &copy; 2024 NearTekPod. All Rights Reserved.
       </footer>
     </div>
   );
