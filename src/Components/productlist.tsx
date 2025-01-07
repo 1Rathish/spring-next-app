@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-// import { useRouter } from "next/router";
 import Link from "next/link";
 import api from "../../utils/api";
 
@@ -18,9 +17,11 @@ interface Product {
 const ProductList: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  // const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
+  // Fetch products
+  const fetchProducts = () => {
+    setLoading(true);
     api
       .get("/getProducts")
       .then((response) => {
@@ -29,12 +30,37 @@ const ProductList: React.FC = () => {
       })
       .catch((error) => {
         console.error("Error fetching products:", error);
+        setError("Failed to fetch products. Please try again later.");
         setLoading(false);
       });
+  };
+
+  // Delete product
+  const handleDelete = (id: number) => {
+    if (confirm("Are you sure you want to delete this product?")) {
+      api
+        .delete(`/products/${id}`)
+        .then(() => {
+          alert("Product deleted successfully!");
+          fetchProducts(); // Refresh product list
+        })
+        .catch((error) => {
+          console.error("Error deleting product:", error);
+          alert("Failed to delete product. Please try again.");
+        });
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
   }, []);
 
   if (loading) {
     return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p style={{ color: "red" }}>{error}</p>;
   }
 
   return (
@@ -78,6 +104,37 @@ const ProductList: React.FC = () => {
           boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
         }}
       >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            marginBottom: "10px",
+          }}
+        >
+          <Link
+            href={`/EditProduct`}
+            style={{
+              backgroundColor: "#4CAF50",
+              color: "white",
+              padding: "10px 20px",
+              borderRadius: "5px",
+              textDecoration: "none",
+              fontWeight: "bold",
+              fontSize: "1em",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+              transition: "background-color 0.3s ease",
+            }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.backgroundColor = "#45a049")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.backgroundColor = "#4CAF50")
+            }
+          >
+            Add Product
+          </Link>
+        </div>
+
         <table
           style={{
             width: "100%",
@@ -116,10 +173,10 @@ const ProductList: React.FC = () => {
                   backgroundColor: index % 2 === 0 ? "#f9f9f9" : "#ffffff",
                   transition: "background-color 0.3s ease",
                 }}
-                onMouseEnter={(e: React.MouseEvent<HTMLTableRowElement>) =>
+                onMouseEnter={(e) =>
                   (e.currentTarget.style.backgroundColor = "#f1f1f1")
                 }
-                onMouseLeave={(e: React.MouseEvent<HTMLTableRowElement>) =>
+                onMouseLeave={(e) =>
                   (e.currentTarget.style.backgroundColor =
                     index % 2 === 0 ? "#f9f9f9" : "#ffffff")
                 }
@@ -140,10 +197,23 @@ const ProductList: React.FC = () => {
                       color: "#4CAF50",
                       fontSize: "1.2em",
                       textDecoration: "none",
+                      marginRight: "10px",
                     }}
                   >
                     ✏️
                   </Link>
+                  <button
+                    onClick={() => handleDelete(product.id)}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      color: "#FF5733",
+                      fontSize: "1.2em",
+                    }}
+                  >
+                    🗑️
+                  </button>
                 </td>
               </tr>
             ))}
