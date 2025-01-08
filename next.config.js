@@ -4,7 +4,7 @@ const nextConfig = {
     return [
       {
         source: '/api/',
-        destination: 'http://localhost:8080/api',
+        destination: 'https://springboot-backend-iccs.onrender.com',
       },
     ];
   },
