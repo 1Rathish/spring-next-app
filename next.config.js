@@ -1,6 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
+  rewrites: async () => {
+    return [
+      {
+        source: '/api/',
+        destination: 'http://localhost:8080/api',
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
