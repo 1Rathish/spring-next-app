@@ -40,9 +40,9 @@ const EditFormPage: React.FC = () => {
           `http://localhost:8080/api/getProductById/${id}`
         );
         reset(response.data); // Populate form fields with the fetched data
-      } catch  {
-        // Use the error for debugging/logging
-        console.error("Failed to fetch product data:");
+      } catch {
+        // Log the error for debugging
+        console.error("Failed to fetch product data.");
         setError("Failed to fetch product data.");
       } finally {
         setLoading(false);
@@ -57,8 +57,8 @@ const EditFormPage: React.FC = () => {
       await axios.put(`http://localhost:8080/api/products/${id}`, data);
       router.push("/"); // Add the destination path
     } catch {
-      // Use the error for debugging/logging
-      console.error("Failed to update the product:");
+      // Log the error for debugging
+      console.error("Failed to update the product.");
       alert("Failed to update the product.");
     }
   };
