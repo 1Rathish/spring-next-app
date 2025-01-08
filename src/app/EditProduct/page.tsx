@@ -40,7 +40,7 @@ const EditFormPage: React.FC = () => {
             `http://localhost:8080/api/getProductById/${id}`
           );
           reset(response.data); // Populate form fields with the fetched data
-        } catch (err) {
+        } catch {
           setError("Failed to fetch product data.");
         } finally {
           setLoading(false);
@@ -63,7 +63,7 @@ const EditFormPage: React.FC = () => {
         alert("Product created successfully!");
       }
       router.push("/"); // Redirect to the products page
-    } catch (err) {
+    } catch {
       alert("Failed to save the product.");
     }
   };
@@ -82,7 +82,7 @@ const EditFormPage: React.FC = () => {
         boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
       }}
     >
-      <h2>{id ? 'Edit Product' : 'Add Product'}</h2>
+      <h2>{id ? "Edit Product" : "Add Product"}</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div style={{ marginBottom: "15px" }}>
           <label
@@ -231,7 +231,7 @@ const EditFormPage: React.FC = () => {
         </div>
 
         <button type="submit" style={buttonStyle}>
-        {id ? 'Save Changes' : 'Save Product'}
+          {id ? "Save Changes" : "Save Product"}
         </button>
       </form>
     </div>
