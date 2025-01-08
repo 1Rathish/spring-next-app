@@ -19,14 +19,26 @@ const ProductList: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Delete product
+  // Move fetchData outside of useEffect
+  const fetchData = async () => {
+    try {
+      const response = await api.get("/getProducts");
+      setProducts(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      setError("Failed to fetch products. Please try again later.");
+      setLoading(false);
+    }
+  };
+
   const handleDelete = (id: number) => {
     if (confirm("Are you sure you want to delete this product?")) {
       api
         .delete(`/products/${id}`)
         .then(() => {
           alert("Product deleted successfully!");
-          fetchData(); // Call the renamed function
+          fetchData(); // Now fetchData is accessible here
         })
         .catch((error) => {
           console.error("Error deleting product:", error);
@@ -36,19 +48,6 @@ const ProductList: React.FC = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      // Renamed to avoid conflict
-      try {
-        const response = await api.get("/getProducts");
-        setProducts(response.data);
-        setLoading(false); // Add this line to set loading to false
-      } catch (error) {
-        console.error("Error fetching products:", error);
-        setError("Failed to fetch products. Please try again later.");
-        setLoading(false); // Add this line to set loading to false on error
-      }
-    };
-
     fetchData();
   }, []);
 
