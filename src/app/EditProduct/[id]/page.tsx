@@ -55,7 +55,7 @@ const EditFormPage: React.FC = () => {
       await axios.put(`http://localhost:8080/api/products/${id}`, data);
       router.push("/"); // Add the destination path
     } catch (err) {
-      alert("Failed to update the product.");
+      alert("Failed to update the product."+err);
     }
   };
 
