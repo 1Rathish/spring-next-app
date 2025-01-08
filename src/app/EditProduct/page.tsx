@@ -12,7 +12,7 @@ interface Product {
   category: string;
   seller: string;
   stock: number;
-  numbfReviews?: number; // Optional for both create and update
+  numbfReviews?: number; // Optional for create
 }
 
 const EditFormPage: React.FC = () => {
@@ -40,7 +40,7 @@ const EditFormPage: React.FC = () => {
             `http://localhost:8080/api/getProductById/${id}`
           );
           reset(response.data); // Populate form fields with the fetched data
-        } catch {
+        } catch (err) {
           setError("Failed to fetch product data.");
         } finally {
           setLoading(false);
@@ -63,7 +63,7 @@ const EditFormPage: React.FC = () => {
         alert("Product created successfully!");
       }
       router.push("/"); // Redirect to the products page
-    } catch {
+    } catch (err) {
       alert("Failed to save the product.");
     }
   };
@@ -209,7 +209,6 @@ const EditFormPage: React.FC = () => {
           {errors.stock && <p style={errorStyle}>{errors.stock.message}</p>}
         </div>
 
-        {/* Only make numbfReviews required if updating an existing product */}
         <div style={{ marginBottom: "15px" }}>
           <label
             htmlFor="numbfReviews"
@@ -221,7 +220,7 @@ const EditFormPage: React.FC = () => {
             type="number"
             id="numbfReviews"
             {...register("numbfReviews", {
-              required: id ? "Number of reviews is required" : false,
+              required: "Number of reviews is required",
               valueAsNumber: true,
             })}
             style={inputStyle}
@@ -232,7 +231,7 @@ const EditFormPage: React.FC = () => {
         </div>
 
         <button type="submit" style={buttonStyle}>
-          {id ? 'Save Changes' : 'Save Product'}
+        {id ? 'Save Changes' : 'Save Product'}
         </button>
       </form>
     </div>
