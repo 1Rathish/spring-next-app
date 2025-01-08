@@ -12,7 +12,7 @@ interface Product {
   category: string;
   seller: string;
   stock: number;
-  numbfReviews: number;
+  numbfReviews?: number; // Optional for create
 }
 
 const EditFormPage: React.FC = () => {
@@ -33,31 +33,38 @@ const EditFormPage: React.FC = () => {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          `http://localhost:8080/api/getProductById/${id}`
-        );
-        reset(response.data); // Populate form fields with the fetched data
-      } catch (err) {
-        setError("Failed to fetch product data.");
-      } finally {
-        setLoading(false);
+      if (id) {
+        try {
+          setLoading(true);
+          const response = await axios.get(
+            `http://localhost:8080/api/getProductById/${id}`
+          );
+          reset(response.data); // Populate form fields with the fetched data
+        } catch (err) {
+          setError("Failed to fetch product data.");
+        } finally {
+          setLoading(false);
+        }
       }
     };
 
-    if (id) {
-      fetchProduct();
-    }
+    fetchProduct();
   }, [id, reset]);
 
   const onSubmit: SubmitHandler<Product> = async (data) => {
     try {
-      await axios.put(`http://localhost:8080/api/products/${id}`, data);
-      alert("Product updated successfully!");
-      router.push("/products"); // Redirect to the products page
+      if (id) {
+        // Update product
+        await axios.put(`http://localhost:8080/api/products/${id}`, data);
+        alert("Product updated successfully!");
+      } else {
+        // Create product
+        await axios.post(`http://localhost:8080/api/products`, data);
+        alert("Product created successfully!");
+      }
+      router.push("/"); // Redirect to the products page
     } catch (err) {
-      alert("Failed to update the product.");
+      alert("Failed to save the product.");
     }
   };
 
@@ -75,7 +82,7 @@ const EditFormPage: React.FC = () => {
         boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
       }}
     >
-      <h2>Edit Product</h2>
+      <h2>{id ? 'Edit Product' : 'Add Product'}</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div style={{ marginBottom: "15px" }}>
           <label
@@ -224,7 +231,7 @@ const EditFormPage: React.FC = () => {
         </div>
 
         <button type="submit" style={buttonStyle}>
-          Save Changes
+        {id ? 'Save Changes' : 'Save Product'}
         </button>
       </form>
     </div>
