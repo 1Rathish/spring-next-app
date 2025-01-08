@@ -3,8 +3,8 @@ const nextConfig = {
   rewrites: async () => {
     return [
       {
-        source: '/api/',
-        destination: 'https://springboot-backend-iccs.onrender.com',
+        source: '/api/:path*',
+        destination: 'https://springboot-backend-iccs.onrender.com/api/:path*',
       },
     ];
   },
