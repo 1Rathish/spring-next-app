@@ -1,6 +1,6 @@
 "use client";
-import React, { useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import axios from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
 
@@ -16,17 +16,12 @@ interface Product {
   numbfReviews?: number; // Optional for create
 }
 
-interface EditFormPageProps {
-  product: Product | null;
-  error: string | null;
-}
-
-const EditFormPage: React.FC<EditFormPageProps> = ({ product, error }) => {
-  const searchParams = useSearchParams();
-  const id = searchParams.get("id"); // Get the product ID from the query params
-  const router = useRouter(); // Initialize the router
-
-  const [loading, setLoading] = useState(false);
+const EditFormPage = () => {
+  const router = useRouter();
+  const { id } = router.query; // Get the product ID from the query params
+  const [product, setProduct] = useState<Product | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const {
     register,
@@ -35,8 +30,25 @@ const EditFormPage: React.FC<EditFormPageProps> = ({ product, error }) => {
     formState: { errors },
   } = useForm<Product>();
 
+  // Fetch product data on component mount
+  useEffect(() => {
+    if (id) {
+      const fetchProduct = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:8080/api/getProductById/${id}`
+          );
+          setProduct(response.data);
+        } catch (err) {
+          setError("Failed to fetch product data.");
+        }
+      };
+      fetchProduct();
+    }
+  }, [id]);
+
   // Populate form with fetched data
-  React.useEffect(() => {
+  useEffect(() => {
     if (product) {
       reset(product);
     }
@@ -125,30 +137,5 @@ const errorStyle = {
   fontSize: "12px",
   marginTop: "5px",
 };
-
-// Fetch product data using getServerSideProps
-export async function getServerSideProps(context: any) {
-  const { id } = context.query;
-  let product = null;
-  let error = null;
-
-  try {
-    if (id) {
-      const response = await axios.get(
-        `http://localhost:8080/api/getProductById/${id}`
-      );
-      product = response.data;
-    }
-  } catch (err) {
-    error = "Failed to fetch product data.";
-  }
-
-  return {
-    props: {
-      product,
-      error,
-    },
-  };
-}
 
 export default EditFormPage;
