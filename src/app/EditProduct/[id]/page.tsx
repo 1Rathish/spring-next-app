@@ -38,7 +38,7 @@ const EditFormPage = () => {
         try {
           const response = await api.get(`/getProductById/${id}`);
           setProduct(response.data);
-        } catch (err) {
+        } catch {
           setError("Failed to fetch product data.");
         }
       };
@@ -66,7 +66,7 @@ const EditFormPage = () => {
         alert("Product created successfully!");
       }
       router.push("/"); // Redirect to the products page
-    } catch (err) {
+    } catch {
       alert("Failed to save the product.");
     } finally {
       setLoading(false);
