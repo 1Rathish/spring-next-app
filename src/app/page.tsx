@@ -1,12 +1,8 @@
-import React from "react";
-import ProductList from "@/Components/productlist";
-
-const Home: React.FC = () => {
+export default function Home() {
   return (
-    <div>
-      <ProductList />
-    </div>
+    <main>
+      <h1>Welcome to the Application</h1>
+      {/* Your content here */}
+    </main>
   );
-};
-
-export default Home;
+}

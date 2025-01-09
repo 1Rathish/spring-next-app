@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'standalone',
-  distDir: '.next',
+  distDir: 'build',
+  basePath: '',
   rewrites: async () => {
     return [
       {
@@ -10,6 +11,7 @@ const nextConfig = {
       },
     ];
   },
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/' : '',
 };
 
 module.exports = nextConfig;
