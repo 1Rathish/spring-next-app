@@ -39,8 +39,8 @@ const EditFormPage: React.FC = () => {
           const response = await axios.get(
             `http://localhost:8080/api/getProductById/${id}`
           );
-          reset(response.data); // Populate form fields with the fetched data
-        } catch {
+          reset(response.data);
+        } catch (_err) {
           setError("Failed to fetch product data.");
         } finally {
           setLoading(false);
@@ -54,16 +54,14 @@ const EditFormPage: React.FC = () => {
   const onSubmit: SubmitHandler<Product> = async (data) => {
     try {
       if (id) {
-        // Update product
         await axios.put(`http://localhost:8080/api/products/${id}`, data);
         alert("Product updated successfully!");
       } else {
-        // Create product
         await axios.post(`http://localhost:8080/api/products`, data);
         alert("Product created successfully!");
       }
-      router.push("/"); // Redirect to the products page
-    } catch {
+      router.push("/");
+    } catch (_err) {
       alert("Failed to save the product.");
     }
   };
