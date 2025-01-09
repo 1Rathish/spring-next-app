@@ -19,30 +19,26 @@ const ProductList: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch products
-  const fetchProducts = () => {
-    setLoading(true);
-    api
-      .get("/getProducts")
-      .then((response) => {
-        setProducts(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching products:", error);
-        setError("Failed to fetch products. Please try again later.");
-        setLoading(false);
-      });
+  // Move fetchData outside of useEffect
+  const fetchData = async () => {
+    try {
+      const response = await api.get("api/getProducts");
+      setProducts(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      setError("Failed to fetch products. Please try again later.");
+      setLoading(false);
+    }
   };
 
-  // Delete product
   const handleDelete = (id: number) => {
     if (confirm("Are you sure you want to delete this product?")) {
       api
         .delete(`/products/${id}`)
         .then(() => {
           alert("Product deleted successfully!");
-          fetchProducts(); // Refresh product list
+          fetchData(); // Now fetchData is accessible here
         })
         .catch((error) => {
           console.error("Error deleting product:", error);
@@ -52,7 +48,7 @@ const ProductList: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchProducts();
+    fetchData();
   }, []);
 
   if (loading) {

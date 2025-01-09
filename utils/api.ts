@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:8080/api', // Replace with your Spring Boot backend URL
+    baseURL: 'https://spring-78fn.onrender.com'
 });
 
 export default api;
