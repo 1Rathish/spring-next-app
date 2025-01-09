@@ -36,7 +36,7 @@ const EditFormPage = () => {
     if (id) {
       const fetchProduct = async () => {
         try {
-          const response = await api.get(`/getProductById/${id}`);
+          const response = await api.get(`api/getProductById/${id}`);
           setProduct(response.data);
         } catch {
           setError("Failed to fetch product data.");

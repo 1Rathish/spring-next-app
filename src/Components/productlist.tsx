@@ -22,7 +22,7 @@ const ProductList: React.FC = () => {
   // Move fetchData outside of useEffect
   const fetchData = async () => {
     try {
-      const response = await api.get("/getProducts");
+      const response = await api.get("api/getProducts");
       setProducts(response.data);
       setLoading(false);
     } catch (error) {

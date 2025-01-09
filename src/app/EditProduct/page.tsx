@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import axios from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
+import api from "../../../utils/api";
 
 interface Product {
   name: string;
@@ -36,9 +37,7 @@ const EditFormPage: React.FC = () => {
       if (id) {
         try {
           setLoading(true);
-          const response = await axios.get(
-            `http://localhost:8080/api/getProductById/${id}`
-          );
+          const response = await api.get(`api/getProducts`);
           reset(response.data);
         } catch (_err) {
           setError("Failed to fetch product data.");
@@ -54,10 +53,10 @@ const EditFormPage: React.FC = () => {
   const onSubmit: SubmitHandler<Product> = async (data) => {
     try {
       if (id) {
-        await axios.put(`http://localhost:8080/api/products/${id}`, data);
+        await api.put(`api/products/${id}`, data);
         alert("Product updated successfully!");
       } else {
-        await axios.post(`http://localhost:8080/api/products`, data);
+        await api.post(`api/products`, data);
         alert("Product created successfully!");
       }
       router.push("/");
