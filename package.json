@@ -5,8 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "node -r dotenv/config node_modules/next/dist/bin/next start",
+    "start": "next start",
     "lint": "next lint"
+  },
+  "engines": {
+    "node": "18.x"
   },
   "dependencies": {
     "@types/axios": "^0.14.4",
