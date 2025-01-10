@@ -35,7 +35,7 @@ const ProductList: React.FC = () => {
   const handleDelete = (id: number) => {
     if (confirm("Are you sure you want to delete this product?")) {
       api
-        .delete(`/products/${id}`)
+        .delete(`api/products/${id}`)
         .then(() => {
           alert("Product deleted successfully!");
           fetchData(); // Now fetchData is accessible here
